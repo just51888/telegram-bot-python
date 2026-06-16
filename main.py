@@ -3,7 +3,7 @@ import os
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
-TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+TOKEN = os.environ.get("8244067983:AAGC2W19r0yCSZeux_KqjWTa-B3m7Mq2gNE")
 
 name_map = {
     "songbai": "94松白会所部长",
