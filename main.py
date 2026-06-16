@@ -5,6 +5,7 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
 TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+ADMIN_ID = 你的用户ID  # 替换成你刚才复制的数字ID，不要引号
 
 name_map = {
     "songbai": "94松白会所部长",
@@ -22,8 +23,9 @@ name_map = {
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     raw_code = context.args[0] if context.args else None
     user_id = update.effective_user.id
+    username = update.effective_user.username or "无用户名"
 
-    # URL 解码（将 %E6%B5%8B... 转为中文）
+    # URL 解码
     if raw_code:
         try:
             code = urllib.parse.unquote(raw_code)
@@ -32,17 +34,26 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         code = None
 
-    # 如果解码后的参数在 name_map 中（拼音），用映射的中文回复
+    # 处理逻辑
     if code and code in name_map:
         chinese = name_map[code]
-        print(f"用户 {user_id} 通过拼音 {code}（{chinese}）进入")
+        print(f"用户 {user_id} ({username}) 通过 {code}（{chinese}）进入")
         await update.message.reply_text(f"兄弟 已经转接：{chinese}")
-    # 如果解码后的参数不在 name_map 中，直接使用（支持中文链接）
+        # 发送通知给管理员
+        await context.bot.send_message(
+            chat_id=ADMIN_ID,
+            text=f"🔔 新用户来源：\n用户ID: {user_id}\n用户名: @{username}\n来源: {chinese}"
+        )
     elif code:
-        print(f"用户 {user_id} 通过中文链接 {code} 进入")
+        print(f"用户 {user_id} ({username}) 通过中文链接 {code} 进入")
         await update.message.reply_text(f"兄弟 已经转接：{code}")
+        # 发送通知给管理员
+        await context.bot.send_message(
+            chat_id=ADMIN_ID,
+            text=f"🔔 新用户来源：\n用户ID: {user_id}\n用户名: @{username}\n来源: {code}"
+        )
     else:
-        print(f"用户 {user_id} 直接开始")
+        print(f"用户 {user_id} ({username}) 直接开始")
         await update.message.reply_text("欢迎！")
 
 async def getlink(update: Update, context: ContextTypes.DEFAULT_TYPE):
