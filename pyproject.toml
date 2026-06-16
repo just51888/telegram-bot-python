@@ -1,18 +1,13 @@
 [project]
 name = "telegram-bot-python"
 version = "0.1.0"
-description = ""
-authors = [{ name = "aeither", email = "36173828+aeither@users.noreply.github.com" }]
-requires-python = ">=3.12"
+description = "A simple Telegram bot"
 readme = "README.md"
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.12",
-]
+requires-python = ">=3.12"
 dependencies = [
-    "pytelegrambotapi>=4.30.0,<5",
-    "python-dotenv>=1.2.1,<2",
+    "python-telegram-bot>=20.0",
 ]
 
-[tool.uv]
-package = false
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
