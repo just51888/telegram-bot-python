@@ -3,7 +3,7 @@ import os
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
-TOKEN = os.environ.get("8244067983:AAGC2W19r0yCSZeux_KqjWTa-B3m7Mq2gNE")
+TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 
 name_map = {
     "songbai": "94松白会所部长",
@@ -33,9 +33,20 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         print(f"用户 {user_id} 直接开始")
         await update.message.reply_text("欢迎！")
 
+async def getlink(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not context.args:
+        await update.message.reply_text("用法：/getlink 中文名称\n例如：/getlink 微信")
+        return
+    import urllib.parse
+    chinese = " ".join(context.args)
+    encoded = urllib.parse.quote(chinese)
+    link = f"https://t.me/{context.bot.username}?start={encoded}"
+    await update.message.reply_text(f"新链接（平台会显示中文）：\n{link}")
+
 def main():
     app = Application.builder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("getlink", getlink))
     print("机器人已启动，按 Ctrl+C 停止")
     app.run_polling()
 
