@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import urllib.parse
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
@@ -20,6 +21,7 @@ name_map = {
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     code = context.args[0] if context.args else None
+    print(f"调试：收到的参数是 {context.args}")  # 调试日志
     user_id = update.effective_user.id
 
     if code and code in name_map:
@@ -37,7 +39,6 @@ async def getlink(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args:
         await update.message.reply_text("用法：/getlink 中文名称\n例如：/getlink 微信")
         return
-    import urllib.parse
     chinese = " ".join(context.args)
     encoded = urllib.parse.quote(chinese)
     link = f"https://t.me/{context.bot.username}?start={encoded}"
