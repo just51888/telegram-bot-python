@@ -20,26 +20,17 @@ name_map = {
 }
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    raw_code = context.args[0] if context.args else None
+    code = context.args[0] if context.args else None
+    print(f"调试：收到的参数是 {context.args}")  # 调试日志
     user_id = update.effective_user.id
 
-    # 1. 先尝试 URL 解码（将编码的中文还原）
-    decoded_code = None
-    if raw_code:
-        try:
-            decoded_code = urllib.parse.unquote(raw_code)
-        except:
-            decoded_code = raw_code
-
-    # 2. 如果解码后的参数在 name_map 中（拼音链接），用映射的中文回复
-    if decoded_code and decoded_code in name_map:
-        chinese = name_map[decoded_code]
-        print(f"用户 {user_id} 通过拼音 {decoded_code}（{chinese}）进入")
+    if code and code in name_map:
+        chinese = name_map[code]
+        print(f"用户 {user_id} 通过 {code}（{chinese}）进入")
         await update.message.reply_text(f"兄弟 已经转接：{chinese}")
-    # 3. 如果解码后的参数不在 name_map 中，但本身是中文（中文链接），直接使用
-    elif decoded_code:
-        print(f"用户 {user_id} 通过中文链接 {decoded_code} 进入")
-        await update.message.reply_text(f"兄弟 已经转接：{decoded_code}")
+    elif code:
+        print(f"用户 {user_id} 通过 {code} 进入")
+        await update.message.reply_text(f"兄弟 已经转接：{code}")
     else:
         print(f"用户 {user_id} 直接开始")
         await update.message.reply_text("欢迎！")
