@@ -1,5 +1,6 @@
 FROM python:3.12-slim
 
+RUN mkdir -p /app
 RUN useradd -m appuser && chown -R appuser:appuser /app
 USER appuser
 
