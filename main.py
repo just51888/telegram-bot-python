@@ -5,7 +5,7 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
 TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
-ADMIN_ID = 你的用户ID  # 替换成你刚才复制的数字ID，不要引号
+ADMIN_ID = 7140260550  # 你的管理员 ID
 
 name_map = {
     "songbai": "94松白会所部长",
@@ -34,24 +34,17 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         code = None
 
-    # 处理逻辑
     if code and code in name_map:
         chinese = name_map[code]
         print(f"用户 {user_id} ({username}) 通过 {code}（{chinese}）进入")
         await update.message.reply_text(f"兄弟 已经转接：{chinese}")
-        # 发送通知给管理员
-        await context.bot.send_message(
-            chat_id=ADMIN_ID,
-            text=f"🔔 新用户来源：\n用户ID: {user_id}\n用户名: @{username}\n来源: {chinese}"
-        )
+        if ADMIN_ID:
+            await context.bot.send_message(chat_id=ADMIN_ID, text=f"🔔 新用户来源：\n用户ID: {user_id}\n用户名: @{username}\n来源: {chinese}")
     elif code:
         print(f"用户 {user_id} ({username}) 通过中文链接 {code} 进入")
         await update.message.reply_text(f"兄弟 已经转接：{code}")
-        # 发送通知给管理员
-        await context.bot.send_message(
-            chat_id=ADMIN_ID,
-            text=f"🔔 新用户来源：\n用户ID: {user_id}\n用户名: @{username}\n来源: {code}"
-        )
+        if ADMIN_ID:
+            await context.bot.send_message(chat_id=ADMIN_ID, text=f"🔔 新用户来源：\n用户ID: {user_id}\n用户名: @{username}\n来源: {code}")
     else:
         print(f"用户 {user_id} ({username}) 直接开始")
         await update.message.reply_text("欢迎！")
