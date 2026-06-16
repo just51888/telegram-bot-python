@@ -5,7 +5,7 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
 TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
-ADMIN_ID = 7140260550  # 你的管理员 ID
+ADMIN_ID = 7709655209  # 你的管理员 ID
 
 name_map = {
     "songbai": "94松白会所部长",
@@ -25,7 +25,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     username = update.effective_user.username or "无用户名"
 
-    # URL 解码
     if raw_code:
         try:
             code = urllib.parse.unquote(raw_code)
